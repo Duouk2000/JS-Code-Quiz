@@ -4,6 +4,9 @@ var timerDisplay = document.getElementById("time");
 var questionsContainer = document.getElementById("questions");
 var questionTitle = document.getElementById("question-title");
 var choicesContainer = document.getElementById("choices");
+
+var time;
+var timerCount;
   
 // Questions
 var questions = [
@@ -46,8 +49,21 @@ var questions = [
   function startGame() {
     document.getElementById("start-screen").style.visibility = "hidden";
     questionsContainer.style.display = "block";
+    timerCount = 60;
+    startTimer()    
     showQuestion();    
   }
+
+  function startTimer() {
+    // Sets timer
+    time = setInterval(function() {
+      timerCount--;
+      timerDisplay.textContent = timerCount;
+      if (timerCount === 0) {
+        clearInterval(time);
+      }
+    }, 1000);
+}
   
   function showQuestion() {
     var currentQuestion = questions[currentQuestionIndex];
@@ -63,7 +79,7 @@ var questions = [
       choiceButton.textContent = currentQuestion.choices[i];
       choiceButton.addEventListener("click", function () {
         console.log("User selected:", this.textContent);
-        // Check the answer and proceed to the next question   
+        // Check the answer and proceed to the next question
         showNextQuestion();
       });
       choicesContainer.appendChild(choiceButton);
@@ -76,7 +92,7 @@ var questions = [
     if (currentQuestionIndex < questions.length) {
       showQuestion();
     } else {
-      // You've reached the end of the questions, handle quiz completion or other logic here
+      // Handle quiz completion here
       console.log("Quiz completed!");
     }
   }
