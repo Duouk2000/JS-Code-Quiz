@@ -7,6 +7,7 @@ var choicesContainer = document.getElementById("choices");
 
 var time;
 var timerCount;
+var scoreCard = "";
   
 // Questions
 var questions = [
@@ -80,23 +81,28 @@ var questions = [
       choiceButton.addEventListener("click", function () {
         console.log("User selected:", this.textContent);
         // Check the answer and proceed to the next question
+        // Deducts 10 seconds from the time if the answer is incorrect
+        if (this.textContent != currentQuestion.correctAnswer){
+            timerCount -= 10;     
+        } 
         showNextQuestion();
       });
       choicesContainer.appendChild(choiceButton);
     }
   }
-
   
   function showNextQuestion() {
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
       showQuestion();
     } else {
-      // Handle quiz completion here
+// log the final time as the users score
       console.log("Quiz completed!");
+      scoreCard = timerCount;
+      console.log("Final Score: " + scoreCard);
     }
   }
   
 //     * The quiz should end when all questions are answered or the timer reaches 0.
   
-//     * When the game ends, it should display their score and give the user the ability to save their initials and their score
+//     * When the game ends, it should display their score and give the user the ability to save their initials and their scorelity to save their initials and their scorehe ability to save their initials and their score
