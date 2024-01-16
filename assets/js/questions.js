@@ -63,7 +63,7 @@ var questions = [
     // Display the questions container
     questionsContainer.style.display = "block";
     // Set the initial time for the timer
-    remainingTime = 60;
+    remainingTime = 30;
     // Start the timer
     startTimer()    
     // Show the first question
@@ -74,11 +74,15 @@ var questions = [
   function startTimer() {
     // Sets timer to update every second
     timerInterval = setInterval(function() {
-        remainingTime--;
-      timerDisplay.textContent = remainingTime;
-      if (remainingTime === 0) {
+        // Decrement remaining time  
+        remainingTime--;     
+      // Check if remaining time is less than or equal to 0
+      if (remainingTime <= 0) {
+        remainingTime = 0; // Set remaining time to 0
         clearInterval(timerInterval);
       }
+      // Update the timer display with the current remaining time
+      timerDisplay.textContent = remainingTime;
     }, 1000);
 }
   
@@ -113,6 +117,11 @@ var questions = [
   // Function to move to the next question
   function showNextQuestion() {
     currentQuestionIndex++;
+    // Check if remaining time is less than 0 and set it to 0
+    if (remainingTime < 0) {
+        remainingTime = 0;
+    }
+
     if (currentQuestionIndex < questions.length) {
       // Display the next question
       showQuestion();
