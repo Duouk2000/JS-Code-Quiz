@@ -8,11 +8,15 @@ var choicesContainer = document.getElementById("choices");
 var submitHighScoreButton = document.getElementById("submit");
 var finalScoreDisplay = document.getElementById("final-score");
 
+// Audio elements for correct and incorrect sounds
 var correctSound = new Audio("./assets/sfx/correct.wav");
 var incorrectSound = new Audio("./assets/sfx/incorrect.wav");
 
+// Variables for the timer
 var timerInterval;
 var remainingTime;
+
+// Stores the quiz scores
 var scoreCard = [];
   
 // Questions
@@ -50,19 +54,25 @@ var questions = [
 
   var currentQuestionIndex = 0;
 
-// Start the timer and asks the first question
+  // Event listener for starting the quiz
   startButton.addEventListener("click", startGame);
-  
+  // Function to start the quiz
   function startGame() {
+    // Hide the start screen
     document.getElementById("start-screen").style.visibility = "hidden";
+    // Display the questions container
     questionsContainer.style.display = "block";
+    // Set the initial time for the timer
     remainingTime = 60;
+    // Start the timer
     startTimer()    
+    // Show the first question
     showQuestion();    
   }
 
+  // Function to start the timer
   function startTimer() {
-    // Sets timer
+    // Sets timer to update every second
     timerInterval = setInterval(function() {
         remainingTime--;
       timerDisplay.textContent = remainingTime;
@@ -72,6 +82,7 @@ var questions = [
     }, 1000);
 }
   
+  // Function to display a question
   function showQuestion() {
     var currentQuestion = questions[currentQuestionIndex];
     questionTitle.textContent = currentQuestion.question;
@@ -79,18 +90,18 @@ var questions = [
     // Clear previous choices
     choicesContainer.innerHTML = "";
   
-    // Create buttons for choices
+    // Create buttons for answer choices
     for (var i = 0; i < currentQuestion.choices.length; i++) {
       var choiceButton = document.createElement("button");
       choiceButton.textContent = currentQuestion.choices[i];
       choiceButton.addEventListener("click", function () {
         // Check the answer and proceed to the next question
-        // Deducts 10 seconds from the time if the answer is incorrect & play sound
+        // Deduct 10 seconds from the timer if the answer is incorrect & play incorrect sound
         if (this.textContent != currentQuestion.correctAnswer){            
             incorrectSound.play();
             remainingTime -= 10;
           } else {
-            // Play sound if answer is correct
+            // Play correct sound if answer is correct
             correctSound.play();
           }
           showNextQuestion();
@@ -99,20 +110,25 @@ var questions = [
       }
     }
   
+  // Function to move to the next question
   function showNextQuestion() {
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
+      // Display the next question
       showQuestion();
     } else {
-// log the final time in the scoreCard array
+      // log the final time in the scoreCard array
       scoreCard.push(remainingTime); 
+      // Hide the questions container
       document.getElementById("questions").style.visibility = "hidden";
-      endScreenContainer.style.display = "block";  
-      finalScoreDisplay.textContent = remainingTime; 
-       
+      // Display the end screen container
+      endScreenContainer.style.display = "block";
+      // Show the final score
+      finalScoreDisplay.textContent = remainingTime;        
     }
   }
 
+  // Event listener for submitting high scores
   submitHighScoreButton.addEventListener("click", function() {
     var initials = document.querySelector("#initials").value;
 
@@ -128,9 +144,15 @@ var questions = [
     scoreCardArray.push(scoreCard);
     initialsArray.push(initials);
 
+    // Sort the scoreCard array in descending order
+    scoreCardArray.sort(function(a, b) {
+        return b - a;
+    });
+
     // Store the updated data back in local storage
     localStorage.setItem("scoreCard", JSON.stringify(scoreCardArray));
     localStorage.setItem("savedInitials", JSON.stringify(initialsArray));
 
+    // Redirect to the high scores page
     window.location.href = "highscores.html";
 });
