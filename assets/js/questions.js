@@ -2,18 +2,21 @@
 var startButton = document.getElementById("start");
 var timerDisplay = document.getElementById("time");
 var questionsContainer = document.getElementById("questions");
+var endScreenContainer = document.getElementById("end-screen");
 var questionTitle = document.getElementById("question-title");
 var choicesContainer = document.getElementById("choices");
+var submitHighScoreButton = document.getElementById("submit");
+var finalScoreDisplay = document.getElementById("final-score");
 
-var time;
-var timerCount;
-var scoreCard = "";
+var timerInterval;
+var remainingTime;
+var scoreCard = [];
   
 // Questions
 var questions = [
     {
       question: "What is JavaScript?",
-      choices: ["A programming language", "A type of coffee", "A fruit"],
+      choices: ["A programming language", "A document", "A type of coffee", "A country" ],
       correctAnswer: "A programming language",
     },
 
@@ -50,18 +53,18 @@ var questions = [
   function startGame() {
     document.getElementById("start-screen").style.visibility = "hidden";
     questionsContainer.style.display = "block";
-    timerCount = 60;
+    remainingTime = 60;
     startTimer()    
     showQuestion();    
   }
 
   function startTimer() {
     // Sets timer
-    time = setInterval(function() {
-      timerCount--;
-      timerDisplay.textContent = timerCount;
-      if (timerCount === 0) {
-        clearInterval(time);
+    timerInterval = setInterval(function() {
+        remainingTime--;
+      timerDisplay.textContent = remainingTime;
+      if (remainingTime === 0) {
+        clearInterval(timerInterval);
       }
     }, 1000);
 }
@@ -74,16 +77,14 @@ var questions = [
     choicesContainer.innerHTML = "";
   
     // Create buttons for choices
-    // if the answer clicked was incorrect then subtract time from the clock
     for (var i = 0; i < currentQuestion.choices.length; i++) {
       var choiceButton = document.createElement("button");
       choiceButton.textContent = currentQuestion.choices[i];
       choiceButton.addEventListener("click", function () {
-        console.log("User selected:", this.textContent);
         // Check the answer and proceed to the next question
         // Deducts 10 seconds from the time if the answer is incorrect
         if (this.textContent != currentQuestion.correctAnswer){
-            timerCount -= 10;     
+            remainingTime -= 10;     
         } 
         showNextQuestion();
       });
@@ -96,13 +97,33 @@ var questions = [
     if (currentQuestionIndex < questions.length) {
       showQuestion();
     } else {
-// log the final time as the users score
-      console.log("Quiz completed!");
-      scoreCard = timerCount;
-      console.log("Final Score: " + scoreCard);
+// log the final time in the scoreCard array
+      scoreCard.push(remainingTime); 
+      document.getElementById("questions").style.visibility = "hidden";
+      endScreenContainer.style.display = "block";  
+      finalScoreDisplay.textContent = remainingTime; 
+       
     }
   }
-  
-//     * The quiz should end when all questions are answered or the timer reaches 0.
-  
-//     * When the game ends, it should display their score and give the user the ability to save their initials and their scorelity to save their initials and their scorehe ability to save their initials and their score
+
+  submitHighScoreButton.addEventListener("click", function() {
+    var initials = document.querySelector("#initials").value;
+
+    // Retrieve existing data from local storage
+    var existingScoreCard = localStorage.getItem("scoreCard");
+    var existingInitials = localStorage.getItem("savedInitials");
+
+    // Parse existing data (if any) or initialize empty arrays
+    var scoreCardArray = existingScoreCard ? JSON.parse(existingScoreCard) : [];
+    var initialsArray = existingInitials ? JSON.parse(existingInitials) : [];
+
+    // Update the data with the new values
+    scoreCardArray.push(scoreCard);
+    initialsArray.push(initials);
+
+    // Store the updated data back in local storage
+    localStorage.setItem("scoreCard", JSON.stringify(scoreCardArray));
+    localStorage.setItem("savedInitials", JSON.stringify(initialsArray));
+
+    window.location.href = "highscores.html";
+});
