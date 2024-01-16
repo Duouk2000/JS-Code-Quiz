@@ -8,6 +8,9 @@ var choicesContainer = document.getElementById("choices");
 var submitHighScoreButton = document.getElementById("submit");
 var finalScoreDisplay = document.getElementById("final-score");
 
+var correctSound = new Audio("./assets/sfx/correct.wav");
+var incorrectSound = new Audio("./assets/sfx/incorrect.wav");
+
 var timerInterval;
 var remainingTime;
 var scoreCard = [];
@@ -82,15 +85,19 @@ var questions = [
       choiceButton.textContent = currentQuestion.choices[i];
       choiceButton.addEventListener("click", function () {
         // Check the answer and proceed to the next question
-        // Deducts 10 seconds from the time if the answer is incorrect
-        if (this.textContent != currentQuestion.correctAnswer){
-            remainingTime -= 10;     
-        } 
-        showNextQuestion();
-      });
-      choicesContainer.appendChild(choiceButton);
+        // Deducts 10 seconds from the time if the answer is incorrect & play sound
+        if (this.textContent != currentQuestion.correctAnswer){            
+            incorrectSound.play();
+            remainingTime -= 10;
+          } else {
+            // Play sound if answer is correct
+            correctSound.play();
+          }
+          showNextQuestion();
+        });
+        choicesContainer.appendChild(choiceButton);
+      }
     }
-  }
   
   function showNextQuestion() {
     currentQuestionIndex++;
