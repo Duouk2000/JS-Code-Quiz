@@ -17,9 +17,9 @@ Click on the 'Start Quiz' button to generate the first question. A timer will be
 The highscore table can be cleared and you can also retake the test.
 
 ## Screenshot
-![screenshot showing the webpage in use](assets/images/screenshot1.jpg) 
-![screenshot showing the webpage in use](assets/images/screenshot2.jpg) 
-![screenshot showing the webpage in use](assets/images/screenshot3.jpg)
+![screenshot showing the webpage in use](assets/Images/screenshot1.jpg) 
+![screenshot showing the webpage in use](assets/Images/screenshot2.jpg) 
+![screenshot showing the webpage in use](assets/Images/screenshot3.jpg)
     
 ## Credits
 
