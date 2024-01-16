@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // Function to display scores
 function displayScores(scoreCardArray, initialsArray) {
+    
     // Clear existing list content
     var highScoresList = document.getElementById("highscores");
     highScoresList.innerHTML = "";
